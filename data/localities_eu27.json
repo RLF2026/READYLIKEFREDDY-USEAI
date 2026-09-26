@@ -1,29 +1,63 @@
 {
   "_meta": {
     "descripcio": "Localitats de la UE-27 i la seva sectoritzacio per al motor de sourcing RLF.",
-    "regla_R14": "Cap fila fabricada. Cada localitat ve de citypopulation.de amb la seva data de referencia.",
-    "procediment_paisos": "Paisos en ordre alfabetic pel nom del pais. Un pais no es dona per tancat fins que te les 100 files verificades.",
-    "sectoritzacio": {
-      "estandard": "Sub-City Districts (SCD) de l'Urban Audit d'Eurostat",
-      "nivell_1": "districtes ciutadans ja establerts",
-      "nivell_2": "criteri de poblacio, entre 5.000 i 40.000 habitants per sector",
-      "font_estandard": "https://ec.europa.eu/eurostat/documents/3859598/5885077/KS-BD-04-002-EN.PDF.pdf",
-      "regla_consum": "Els sectors es consumeixen en ordre estricte. El sector N+1 no s'obre fins que el sector N esta esgotat.",
-      "criteri_esgotament": "15 recerques senceres seguides sense cap resposta en forma de proveidor"
-    },
-    "font": "citypopulation.de",
+    "regla_R14": "Cap fila fabricada. Cada dada ve d'una font externa citada, amb la seva data de referencia.",
+    "procediment_paisos": "Paisos en ordre alfabetic pel nom del pais. Un pais no es dona per tancat fins que te les 100 files verificades i sectoritzades.",
+    "font_localitats": "citypopulation.de",
     "data_de_recollida": "2026-09-26",
-    "estat_global": "EN CURS - 1 de 27 paisos tancat",
-    "paisos_tancats": ["Alemanya"],
-    "paisos_pendents_ordre": ["Austria", "Belgica", "Bulgaria", "Croacia", "Dinamarca", "Eslovaquia", "Eslovenia", "Espanya", "Estonia", "Finlandia", "Franca", "Grecia", "Hongria", "Irlanda", "Italia", "Letonia", "Lituania", "Luxemburg", "Malta", "Paisos Baixos", "Polonia", "Portugal", "Republica Txeca", "Romania", "Suecia", "Xipre"]
+    "estat_global": "EN CURS"
+  },
+  "sectoritzacio": {
+    "estandard": "Sub-City Districts (SCD) de l'Urban Audit d'Eurostat",
+    "nivell_1": "districtes ciutadans ja establerts (Bezirke, boroughs, districts)",
+    "nivell_2": "criteri de poblacio: entre 5.000 i 40.000 habitants per sector",
+    "manual": "https://ec.europa.eu/eurostat/documents/3859598/5885077/KS-BD-04-002-EN.PDF.pdf",
+    "regla_abast": "Els SCD es defineixen per a totes les capitals i per a les ciutats de mes de 250.000 habitants. Per a les ciutats mes petites, son opcionals: si no estan publicats, es deriven pel criteri de poblacio (nivell 2).",
+    "regla_consum": "Els sectors es consumeixen en ORDRE ESTRICTE. El sector N+1 no s'obre fins que el sector N esta esgotat.",
+    "criteri_esgotament": "15 recerques senceres seguides sense cap resposta en forma de proveidor",
+    "prohibicio": "No es pot avancar de sector sense tenir l'anterior esgotat i verificat.",
+    "tractament_futur": "Un cop passats tots els sectors d'una poblacio, es passa a la poblacio seguent en ordre alfabetic.",
+    "ciutats_urban_audit_alemanya": {
+      "Berlin": "DE001C", "Munchen": "DE003C", "Leipzig": "DE008C",
+      "Dresden": "DE009C", "Dortmund": "DE010C", "Dusseldorf": "DE011C",
+      "Bremen": "DE012C", "Bochum": "DE015C", "Bielefeld": "DE017C",
+      "Darmstadt": "DE025C", "Augsburg": "DE033C", "Bonn": "DE034C",
+      "font": "Urban Audit Methodological Handbook, seccio 2.2 Participating Cities"
+    },
+    "font_esquema_espacial": "https://ec.europa.eu/eurostat/cache/metadata/EN/urb_esms_at.htm"
   },
   "paisos": {
     "Alemanya": {
       "codi": "DE",
       "ordre_alfabetic": 1,
-      "font": "https://www.citypopulation.de/en/germany/cities/",
+      "font_localitats": "https://www.citypopulation.de/en/germany/cities/",
       "data_referencia_poblacio": "2025-12-31",
-      "estat": "100 files verificades",
+      "estat": "100 localitats verificades; sectoritzacio en curs",
+      "sectors_verificats": {
+        "Berlin": {
+          "nivell": 1,
+          "unitat": "Bezirke",
+          "sectors": [
+            "Mitte", "Friedrichshain-Kreuzberg", "Pankow", "Charlottenburg-Wilmersdorf",
+            "Spandau", "Steglitz-Zehlendorf", "Tempelhof-Schöneberg", "Neukölln",
+            "Treptow-Köpenick", "Marzahn-Hellersdorf", "Lichtenberg", "Reinickendorf"
+          ],
+          "total": 12,
+          "font": "https://www.citypopulation.de/en/germany/berlin/admin/",
+          "font_alternativa": "https://en.wikipedia.org/wiki/Boroughs_and_quarters_of_Berlin"
+        },
+        "Hamburg": {
+          "nivell": 1,
+          "unitat": "Bezirke",
+          "sectors": [
+            "Hamburg-Mitte", "Altona", "Eimsbüttel", "Hamburg-Nord",
+            "Wandsbek", "Bergedorf", "Harburg"
+          ],
+          "total": 7,
+          "font": "https://www.citypopulation.de/en/germany/cities/hamburg",
+          "font_alternativa": "https://en.wikipedia.org/wiki/Boroughs_and_quarters_of_Hamburg"
+        }
+      },
       "localitats": [
         ["Berlin", 3700577], ["Hamburg", 1869473], ["München", 1505036],
         ["Köln", 1025523], ["Frankfurt am Main", 760656], ["Düsseldorf", 619444],
@@ -64,9 +98,25 @@
     "Austria": {
       "codi": "AT",
       "ordre_alfabetic": 2,
-      "font": "https://www.citypopulation.de/en/austria/cities/",
+      "font_localitats": "https://www.citypopulation.de/en/austria/cities/",
       "data_referencia_poblacio": "2026-01-01",
-      "estat": "EN CURS - 51 files verificades de 100",
+      "estat": "EN CURS",
+      "sectors_verificats": {
+        "Wien": {
+          "nivell": 1,
+          "unitat": "Bezirke",
+          "total": 23,
+          "nota": "Viena te 23 districtes numerats (1. Bezirk a 23. Bezirk).",
+          "exemples_amb_poblacio": {
+            "Favoriten (10. Bezirk)": 225013,
+            "Floridsdorf (21. Bezirk)": 191527,
+            "Simmering (11. Bezirk)": 112214,
+            "Ottakring (16. Bezirk)": 101599,
+            "Penzing (14. Bezirk)": 99469
+          },
+          "font": "https://www.citypopulation.de/en/austria/admin/"
+        }
+      },
       "localitats": [
         ["Wien", 2040914], ["Graz", 306971], ["Linz", 214272],
         ["Salzburg", 157834], ["Innsbruck", 132820], ["Klagenfurt am Wörthersee", 105734],
