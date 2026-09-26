@@ -1,0 +1,12 @@
+#!/bin/sh
+# Hook de pre-commit del repositori RLF.
+#
+# Comprova la sintaxi de tots els moduls i executa les suites de proves abans
+# de cada commit. Si alguna comprovacio falla, el commit s'atura.
+#
+# Instal·lacio, un cop per repositori:
+#     git config core.hooksPath .githooks
+#     chmod +x .githooks/pre-commit
+
+python3 -m compileall -q shared projects governance tests || exit 1
+python3 tests/run_all.py || exit 1
