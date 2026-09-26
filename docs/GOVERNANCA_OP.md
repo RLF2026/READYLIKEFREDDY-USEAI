@@ -1,8 +1,6 @@
 # Registre de decisions de governança (OP)
 
-Registre de les decisions de governança tancades del sistema RLF, transcrites de §6.3.4 del
-document mestre canònic. **Totes les entrades d'aquesta taula estan TANCADES** segons el
-document. Un OP tancat no es reobre sense una nova decisió de governança explícita.
+Registre de les decisions de governança tancades del sistema RLF, transcrites de §6.3.4 del document mestre canònic. **Totes les entrades d'aquesta taula estan TANCADES** segons el document. Un OP tancat no es reobre sense una nova decisió de governança explícita.
 
 | OP | Tipus | Matèria | Referència | Estat |
 |---|---|---|---|---|
@@ -27,11 +25,7 @@ document. Un OP tancat no es reobre sense una nova decisió de governança expl�
 | OP-032 | Decisió de governança | Estàndard de valors normalitzats (polos) | §3.5.8 | Tancat |
 | OP-033 | Decisió de governança | Extensió de l'estàndard de valors normalitzats a la resta de categories del catàleg | §3.5.8.9–§3.5.8.13 | Tancat |
 
-**Nota del document (§6.3.4):** només resten oberts els gates que depenen d'execució real i
-els valors que encara no existeixin com a artefacte verificable. El requisit de ≥10.000
-proveïdors VALIDATS, el de ≥15.000 productes KB FULL-CERTIFIED i els 60 dies d'operativa
-estable amb ≥1 venda/setmana **no són OP**: són gates operatius de preinauguració, i només
-es tanquen fent la feina real, no amb una decisió de governança.
+**Nota del document (§6.3.4):** només resten oberts els gates que depenen d'execució real i els valors que encara no existeixin com a artefacte verificable. El requisit de ≥10.000 proveïdors VALIDATS, el de ≥15.000 productes KB FULL-CERTIFIED i els 60 dies d'operativa estable amb ≥1 venda/setmana **no són OP**: són gates operatius de preinauguració, i només es tanquen fent la feina real, no amb una decisió de governança.
 
 ---
 
@@ -50,6 +44,8 @@ Ordre canònic. Els vuit contractes són transversals al sistema.
 | 7 | RLF-TURN/1.0 | Cicle d'execució (inici, pausa, represa, tancament) | §4.4.7 |
 | 8 | RLF-RELEASE-MANIFEST/2.0 | Què és una versió del sistema | §4.4.8 |
 
+**Nota de versions:** les versions dels contractes (`/1.0`, `/2.0`) són **versions de cada contracte**, no la versió del sistema. La versió del sistema és a `docs/VERSIO.md`.
+
 ---
 
 ## Jerarquia executiva — set nivells (§2.2)
@@ -64,11 +60,8 @@ Ordre canònic. Els vuit contractes són transversals al sistema.
 | 5 | Governança | 8 contractes |
 | 6 | Humà | Governança superior |
 
-**Nivell 6 és humà.** Màquina = execució. Humà = governança: definir política, aprovar canvis,
-gestionar excepcions, revisar casos amb evidència insuficient, autoritzar migracions,
-supervisar releases, decidir estratègia, resoldre punts oberts (§2.2.7).
+**Nivell 6 és humà.** Màquina = execució. Humà = governança: definir política, aprovar canvis, gestionar excepcions, revisar casos amb evidència insuficient, autoritzar migracions, supervisar releases, decidir estratègia, resoldre punts oberts (§2.2.7).
 
 ---
 
-*Transcripció de §6.3.4, §2.2.6 i §2.2. Si hi ha discrepància, mana el document mestre.
-Aquest registre no afegeix, no reinterpreta i no tanca cap OP pel seu compte.*
+*Transcripció de §6.3.4, §2.2.6 i §2.2. Si hi ha discrepància, mana el document mestre. Aquest registre no afegeix, no reinterpreta i no tanca cap OP pel seu compte. La versió del sistema és a `docs/VERSIO.md`.*
