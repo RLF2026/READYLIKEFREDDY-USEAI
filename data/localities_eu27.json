@@ -59,10 +59,33 @@
         ["Konstanz", 86691], ["Zwickau", 86405], ["Lünen", 85844],
         ["Norderstedt", 83196], ["Delmenhorst", 81274], ["Neumünster", 80145],
         ["Rheine", 77552], ["Bamberg", 77218]
-      ],
-      "sectors": {
-        "nota": "Cada localitat es desglossa en sectors SCD abans d'encuar feina. El desglossament es fa cas per cas amb font."
-      }
+      ]
+    },
+    "Austria": {
+      "codi": "AT",
+      "ordre_alfabetic": 2,
+      "font": "https://www.citypopulation.de/en/austria/cities/",
+      "data_referencia_poblacio": "2026-01-01",
+      "estat": "EN CURS - 51 files verificades de 100",
+      "localitats": [
+        ["Wien", 2040914], ["Graz", 306971], ["Linz", 214272],
+        ["Salzburg", 157834], ["Innsbruck", 132820], ["Klagenfurt am Wörthersee", 105734],
+        ["Villach", 66051], ["Wels", 65764], ["Sankt Pölten", 60112],
+        ["Dornbirn", 52252], ["Wiener Neustadt", 50025], ["Steyr", 37898],
+        ["Feldkirch", 35490], ["Bregenz", 29270], ["Leonding", 29161],
+        ["Klosterneuburg", 28153], ["Krems an der Donau", 25581], ["Traun", 25436],
+        ["Wolfsberg", 25011], ["Lustenau", 24704], ["Leoben", 24455],
+        ["Kapfenberg", 21796], ["Schwechat", 21471], ["Mödling", 20662],
+        ["Kufstein", 20118], ["Traiskirchen", 18958], ["Hohenems", 17668],
+        ["Braunau am Inn", 17534], ["Stockerau", 17363], ["Saalfelden am Steinernen Meer", 17360],
+        ["Tulln an der Donau", 16758], ["Telfs", 16467], ["Eisenstadt", 16396],
+        ["Bruck an der Mur", 15608], ["Spittal an der Drau", 15263], ["Bludenz", 14994],
+        ["Marchtrenk", 14942], ["Perchtoldsdorf", 14904], ["Hall in Tirol", 14625],
+        ["Schwaz", 14581], ["Wals-Siezenheim", 14452], ["Wörgl", 14398],
+        ["Bad Ischl", 14137], ["Hard", 13800], ["Korneuburg", 13790],
+        ["Leibnitz", 13441], ["Vöcklabruck", 12985], ["Neunkirchen", 12984],
+        ["Ried im Innkreis", 12965], ["Knittelfeld", 12792], ["Bad Vöslau", 12589]
+      ]
     }
   }
 }
