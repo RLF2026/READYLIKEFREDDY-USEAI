@@ -1,22 +1,19 @@
-# Joc verd — fons transparent
+# `assets/brand/green/` — SUPERSEDED
 
-Actius de logotip en verd, fons transparent i fons pla. Detall complet, regles de marca,
-paleta i punts oberts a `../MANIFEST.md`.
+Aquesta carpeta ha estat **substituïda** per l'estructura del lliurament AAA. Vegeu
+`../MANIFEST.md` §9.
 
-Fitxers que hi han d'anar (mides reals verificades, 2000 × 1224 px tots quatre):
+L'estructura viva és:
 
-| Nom al repositori | Canal alfa | Pes |
-|---|---|---|
-| `rlf-logo-a-green-transparent-master.png` | Sí | 1.828.434 B |
-| `rlf-logo-a-green-master.jpg` | No | 205.578 B |
-| `rlf-logo-a-green-transparent-web.png` | Sí | 2.356.787 B |
-| `rlf-logo-a-green-web.jpg` | No | 210.375 B |
+```
+assets/brand/
+├── A_VERDE_FONDO_TRANSPARENTE/
+├── A_VERDE_FONDO_BLANCO/
+├── B_NEGRO_FONDO_TRANSPARENTE/
+└── B_NEGRO_FONDO_BLANCO/
+```
 
-**Estat del lliurament d'aquests fitxers:** vegeu el README de l'arrel del repositori i
-`docs/REGISTRE.md`. Els fitxers binaris no s'han pogut pujar per mitjà de les eines de text
-disponibles; els fitxers han d'entrar-hi per la interfície web de GitHub o per una via que
-admeti bytes.
+Els fitxers del joc verd van a `A_VERDE_FONDO_TRANSPARENTE/` i `A_VERDE_FONDO_BLANCO/` amb els
+noms originals del lliurament.
 
-No s'ha eliminat cap fitxer ni s'ha deixat cap fitxer parcial en aquesta carpeta.
-Una carpeta amb el manifest i sense binaris és informació correcta: diu exactament què hi
-falta.
+Aquesta carpeta es pot eliminar quan els fitxers estiguin carregats a la destinació.
