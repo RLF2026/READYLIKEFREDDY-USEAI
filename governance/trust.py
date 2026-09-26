@@ -1,4 +1,17 @@
-"""Contracte de governanca RLF-TRUST/1.0 (S4.4.1)."""
+"""Contracte de governanca RLF-TRUST/1.0 - quin estat es de confianca.
+
+Implementa §4.4.1 del document mestre canonic v2.6.0.
+
+La pregunta fonamental del contracte es *quin estat es de confianca?* i la
+resposta canonica es que ho es l'estat que pot ser verificat contra els
+artefactes canonics. Sense artefactes verificables no hi ha confianca: hi ha
+HOLD, perque el sistema es fail-closed.
+
+Els set tipus d'artefacte canonic son manifests, versions, checkpoints, hashes,
+estat, migracions i releases. Les transicions TRUST_EPOCH son canvis formals
+de context i es produeixen per sis causes: migracio de versio, canvi d'entorn,
+canvi d'operador, publicacio de release, resolucio d'inconsistencia i auditoria.
+"""
 
 from typing import Any, Optional
 
@@ -55,6 +68,21 @@ logger = get_logger(__name__)
 
 
 def is_trusted_state(artefacts_present: dict[str, bool]) -> dict[str, Any]:
+    """Determina si un estat es de confianca segons els artefactes presents.
+
+    Un estat nomes es de confianca si pot ser verificat contra els artefactes
+    canonics. Sense cap artefacte, no hi ha confianca fiable i la decisio es
+    HOLD. Un tipus d'artefacte que no sigui canonic es REJECT.
+
+    Args:
+        artefacts_present: Presencia de cada tipus d'artefacte canonic, amb el
+            nom del tipus com a clau i un boolea com a valor.
+
+    Returns:
+        Un resultat canonic SUCCESS amb el veredicte, el nombre d'artefactes
+        presents i els que falten. HOLD si no hi ha cap artefacte verificable.
+        REJECT si apareix un tipus d'artefacte que no es canonic.
+    """
     if not isinstance(artefacts_present, dict) or not artefacts_present:
         return make_hold(
             "Cap artefacte canonic present: l'estat no es verificable",
@@ -88,6 +116,19 @@ def is_trusted_state(artefacts_present: dict[str, bool]) -> dict[str, Any]:
 
 
 def declare_trust_epoch(cause: str, detail: Optional[str] = None) -> dict[str, Any]:
+    """Declara una transicio TRUST_EPOCH, segons §4.4.1.
+
+    Una transicio d'epoca es un canvi formal de context del sistema i nomes es
+    pot declarar per una de les sis causes canoniques.
+
+    Args:
+        cause: Causa formal de la transicio, una de les sis canoniques.
+        detail: Detall addicional per a la traçabilitat.
+
+    Returns:
+        Un resultat canonic SUCCESS amb la transicio declarada. REJECT si la
+        causa no es cap de les sis canoniques.
+    """
     if cause not in EPOCH_CAUSES:
         return make_reject(
             "Causa de TRUST_EPOCH no canonica",
@@ -105,6 +146,20 @@ def verify_state_against_artefacts(
     state: dict[str, Any],
     artefacts: dict[str, dict[str, Any]],
 ) -> dict[str, Any]:
+    """Verifica un estat declarat contra els seus artefactes canonics.
+
+    Un artefacte sense estructura verificable es una contradiccio i per tant
+    REJECT. Un artefacte sense hash no es comprovable i per tant porta a HOLD.
+
+    Args:
+        state: Estat declarat pel sistema.
+        artefacts: Artefactes amb identitat, versio i hash.
+
+    Returns:
+        Un resultat canonic SUCCESS amb el veredicte de confianca i el nombre
+        d'artefactes verificats. HOLD si falta informacio per verificar.
+        REJECT si hi ha un artefacte amb estructura no verificable.
+    """
     if not isinstance(state, dict) or not isinstance(artefacts, dict):
         return make_reject("L'estat i els artefactes han de ser diccionaris")
 
@@ -140,6 +195,15 @@ def verify_state_against_artefacts(
 
 
 def trust_epoch_history(causes: list[str]) -> dict[str, Any]:
+    """Resumeix l'historial de transicions d'epoca.
+
+    Args:
+        causes: Causes declarades, en ordre cronologic.
+
+    Returns:
+        Un resultat canonic SUCCESS amb el recompte per causa i el total.
+        REJECT si alguna causa de l'historial no es canonica.
+    """
     unknown = [c for c in causes if c not in EPOCH_CAUSES]
     if unknown:
         return make_reject(
