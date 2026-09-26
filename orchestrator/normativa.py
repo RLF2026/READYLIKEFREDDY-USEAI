@@ -14,13 +14,11 @@ EXCEPCIONS DICTADES PER L'OPERADOR
 Mentre aquesta seccio sigui buida, s'aplica el mestre sencer, sense retallar.
 --------------------------------------------------------------------------------
 """
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import date
 from enum import Enum
-
 
 OBJECTIU_PROVEIDORS = 10000
 LOCALITATS_PER_PAIS = 100
@@ -31,7 +29,6 @@ DATA_INFERIOR = 1952
 DATA_SUPERIOR = date(2026, 9, 16)
 
 CRITERI_ESGOTAMENT_RECERQUES = 15
-
 VERSIO_NORMATIVA = "normativa/1.0"
 DATA_RATIFICACIO = "2026-09-26"
 
@@ -91,15 +88,14 @@ class Carril:
 
 
 def carrils_canonics() -> list[Carril]:
-    """Els 27 carrils, un per pais de la UE-27, tots independents."""
     paisos = [
-        ("Alemanya", "DE"), ("Àustria", "AT"), ("Bèlgica", "BE"), ("Bulgària", "BG"),
-        ("Croàcia", "HR"), ("Dinamarca", "DK"), ("Eslovàquia", "SK"), ("Eslovènia", "SI"),
-        ("Espanya", "ES"), ("Estònia", "EE"), ("Finlàndia", "FI"), ("França", "FR"),
-        ("Grècia", "GR"), ("Hongria", "HU"), ("Irlanda", "IE"), ("Itàlia", "IT"),
-        ("Letònia", "LV"), ("Lituània", "LT"), ("Luxemburg", "LU"), ("Malta", "MT"),
-        ("Països Baixos", "NL"), ("Polònia", "PL"), ("Portugal", "PT"), ("Romania", "RO"),
-        ("Suècia", "SE"), ("Txèquia", "CZ"), ("Xipre", "CY"),
+        ("Alemanya", "DE"), ("Austria", "AT"), ("Belgica", "BE"), ("Bulgaria", "BG"),
+        ("Croacia", "HR"), ("Dinamarca", "DK"), ("Eslovaquia", "SK"), ("Eslovenia", "SI"),
+        ("Espanya", "ES"), ("Estonia", "EE"), ("Finlandia", "FI"), ("Franca", "FR"),
+        ("Grecia", "GR"), ("Hongria", "HU"), ("Irlanda", "IE"), ("Italia", "IT"),
+        ("Letonia", "LV"), ("Lituania", "LT"), ("Luxemburg", "LU"), ("Malta", "MT"),
+        ("Paisos Baixos", "NL"), ("Polonia", "PL"), ("Portugal", "PT"), ("Romania", "RO"),
+        ("Suecia", "SE"), ("Txequia", "CZ"), ("Xipre", "CY"),
     ]
     if len(paisos) != TOTAL_CARRILS:
         raise AssertionError(f"calen {TOTAL_CARRILS} carrils, n'hi ha {len(paisos)}")
@@ -120,7 +116,6 @@ class Verificacio:
 
 
 def comprova_entrada(*, nom: str, url: str, extracte: str, data_consulta: str, anys: list[int] | None = None) -> Verificacio:
-    """Cap dada entra sense prova documental real (R14)."""
     motius: list[str] = []
     if not nom or not nom.strip():
         motius.append("nom buit")
@@ -150,8 +145,5 @@ def sector_esgotat(recerques_sense_resultat: int) -> bool:
 
 def comprova_avanc(carril: Carril) -> Verificacio:
     if not carril.pot_obrir_sector():
-        return Verificacio(
-            ok=False,
-            motius=[f"{carril.pais}: sector no esgotat ({carril.recerques_sense_resultat}/{CRITERI_ESGOTAMENT_RECERQUES})"],
-        )
+        return Verificacio(ok=False, motius=[f"{carril.pais}: sector no esgotat ({carril.recerques_sense_resultat}/{CRITERI_ESGOTAMENT_RECERQUES})"])
     return Verificacio(ok=True)

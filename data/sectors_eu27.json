@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "descripcio": "Sectoritzacio de les localitats de la UE-27. Un carril per pais.",
+    "descripcio": "Sectoritzacio de les localitats de la UE-27. Un carril per pais. Tot va directament al GitHub.",
     "idioma": "Tot en catala. Noms de pais i ciutat en catala; termes tecnics professionals en la seva llengua.",
     "estat_global": "EN CURS",
     "carrils": 27,
@@ -26,7 +26,7 @@
         "nom": "Augsburg",
         "nom_local": "Augsburg",
         "poblacio": 301786,
-        "unitat": "Planungsräume + Stadtbezirke",
+        "unitat": "Planungsräume i Stadtbezirke",
         "total_sectors": 42,
         "sectors": ["1 Lechviertel, östl. Ulrichsviertel", "2 Innenstadt, St. Ulrich-Dom", "3 Bahnhofs-, Bismarckviertel", "4 Georgs- u. Kreuzviertel", "5 Stadtjägerviertel", "6 Rechts der Wertach", "7 Bleich und Pfärrle", "8 Jakobervorstadt-Nord", "9 Jakobervorstadt-Süd", "10 Am Schäfflerbach", "11 Spickel", "12 Siebenbrunn", "13 Hochfeld", "14 Antonsviertel", "15 Rosenau- u. Thelottviertel", "16 Pfersee-Süd", "17 Pfersee-Nord", "18 Kriegshaber", "19 Links der Wertach-Süd", "20 Links der Wertach-Nord", "21 Oberhausen-Süd", "22 Oberhausen-Nord", "23 Bärenkeller", "24 Hochzoll-Nord", "25 Lechhausen-Süd", "26 Lechhausen-Ost", "27 Lechhausen-West", "28 Herrenbachviertel", "29 Spickel-Herrenbach", "30 Hochzoll-Süd", "32 Universitätsviertel", "33 Haunstetten-Nord", "34 Haunstetten-West", "35 Haunstetten-Ost", "36 Haunstetten-Süd", "37 Göggingen-Nordwest", "38 Göggingen-Nordost", "39 Göggingen-Ost", "40 Göggingen-Süd", "41 Inningen", "42 Bergheim"],
         "nota": "El Stadtbezirk 31 es diu Hochzoll-Süd segons la font municipal; la llista oficial en dona 42.",
@@ -40,7 +40,7 @@
         "unitat": "statistische Bezirke",
         "total_sectors": 6,
         "sectors": ["1 Schildgen, Katterbach, Nussbaum, Paffrath, Hand", "2 Stadtzentrum, Hebborn, Heidkamp, Gronau", "3 Romaney, Herrenstrunden, Sand", "4 Herkenrath, Asselborn, Bärbroich", "5 Lückerath, Bensberg, Bockenberg, Kaule, Moitzfeld", "6 Refrath, Alt Refrath, Kippekausen, Frankenforst, Lustheide"],
-        "nota": "6 statistische Bezirke amb 25 Stadtteile. No té Stadtbezirke propis.",
+        "nota": "6 statistische Bezirke amb 25 Stadtteile. No te Stadtbezirke propis.",
         "font": "https://en.wikipedia.org/wiki/Bergisch_Gladbach",
         "estat": "VERIFICAT"
       },
@@ -51,7 +51,7 @@
         "unitat": "Stadtbezirke",
         "total_sectors": 10,
         "sectors": ["Mitte", "Schildesche", "Gadderbaum", "Brackwede", "Dornberg", "Jöllenbeck", "Heepen", "Stieghorst", "Sennestadt", "Senne"],
-        "nota": "10 Stadtbezirke, 72 statistische Bezirke, 170 unitats estadístiques.",
+        "nota": "10 Stadtbezirke, 72 statistische Bezirke, 170 unitats estadistiques.",
         "font": "https://www.bielefeld.de/stadtbezirke",
         "estat": "VERIFICAT"
       },
@@ -74,7 +74,7 @@
         "unitat": "Stadtbezirke",
         "total_sectors": 12,
         "sectors": ["111", "112", "212", "221", "222", "321", "322", "323", "330", "331", "332", "333"],
-        "nota": "12 Stadtbezirke des de l'01.11.2021. Els codis oficials son numerics; els noms de cada Bezirk s'han de completar amb el mapa municipal.",
+        "nota": "12 Stadtbezirke des de l'01.11.2021. Els codis oficials son numerics; falten els noms de cada Bezirk.",
         "font": "https://www.braunschweig.de/politik_verwaltung/politik/ratderstadt/stadtbezirksraete/index.php",
         "estat": "PENDENT_COMPLETAR_NOMS"
       }
