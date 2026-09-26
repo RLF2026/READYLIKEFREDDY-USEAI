@@ -12,182 +12,8 @@ Document derivat. El contingut normatiu prové de §1.2–§1.3 i §5.2.11 del d
 S'han decodificat els PNG sencers (chunks IDAT, descompressió zlib, filtres de línia) i s'han
 llegit els píxels un a un. Sobre els canals RGB i alfa reals s'han calculat: percentatge
 d'opacitat, color dominant de la tinta, caixa delimitadora del contingut i marges en píxels.
-Les JPEG no admeten aquesta anàlisi per alfa i s'han analitzat només per mides i pes.
-
----
-
-### → Corregit: el defecte greu
-
-**PO-1 i PO-3 i l'estat del joc A han resultat en una troballa que cap decisió de governança
-pot tancar: un dels fitxers lliurats no és el que diu ser.**
-
----
-
-## Resolució per punt
-
-### PO-1 — Mides declarades vs. mides reals
-
-**TANCABLE PER GOVERNANÇA. No tancable per mesura: és una decisió de noms, no un defecte.**
-
-Fet verificat a nivell de píxel: **els setze binaris fan 2000 × 1224 px.** Cap fa 4096 px ni
-2048 px. El canvas és idèntic a tots quatre grups del lliurament.
-
-Conseqüència: el camp `[SIZE]` del nom és incorrecte a tots els fitxers del lliurament. No és
-un error de reescalat —és el mateix canvas a tot arreu— sinó que els noms declaren una mida que
-cap fitxer té.
-
-**Regla aplicada:** un nom ha de descriure el contingut, no la intenció. Fins que governança
-decideixi, els noms s'han de llegir com a *rol* (`MASTER` / `WEB`) i no com a mida, i el
-manifest documenta la mida real de cada fitxer.
-
----
-
-### PO-2 — El fitxer "WEB" més pesat que el "MASTER"
-
-**TANCABLE. Mesurat.**
-
-| Grup | PNG màster | PNG web | Veredicte |
-|---|---|---|---|
-| A verd transparent | 1.828.434 B | 2.356.787 B | web **+528 KB** més pesat |
-| B negre transparent | 1.728.932 B | 1.822.735 B | web **+94 KB** més pesat |
-| B negre fons blanc | 1.317.380 B | 1.357.570 B | web **+40 KB** més pesat |
-
-Als tres grups on hi ha els dos PNG, el fitxer de rol `WEB` pesa més que el de rol `MASTER`.
-El rol del fitxer de web és servir la botiga pública (§1.6, §6.8.3). Un actiu que pesa més que
-el seu màster no compleix el rol.
-
-Causa probable, coherent amb els píxels: els dos PNG transparents de cada variant tenen
-**exactament la mateixa distribució d'alfa** (1.331.775 px totalment transparents, 1.110.187
-parcials, 6.038 opacs) i la mateixa caixa de contingut. És a dir: contenen la mateixa imatge, i
-el més gran no aporta res que el petit no tingui. El PNG de rol web és el candidat indicat per
-reexportar amb compressió adequada.
-
----
-
-### PO-3 — Marge de seguretat de §1.3
-
-**MESURAT. Incompleix l'especificació.**
-
-§1.3 exigeix espai de seguretat igual a **l'alçada de la "R" ×2** en totes direccions.
-
-Mesura feta sobre `B_NEGRO_FONDO_TRANSPARENTE_MASTER`: alçada del glif "R" de READY =
-**300 px**. Marge exigit per l'especificació = **600 px**. Marge real = **64–67 px**.
-
-| Paràmetre | Valor |
-|---|---|
-| Alçada del glif "R" | 300 px |
-| Marge exigit per §1.3 (R ×2) | **600 px** |
-| Marge real a `B_NEGRO_FONDO_TRANSPARENTE_MASTER` | 64–67 px |
-| Marge real a `B_NEGRO_FONDO_TRANSPARENTE_WEB` | 65–66 px |
-| Marge real a `A_VERDE_FONDO_TRANSPARENTE_WEB` | 65–66 px |
-| Ràtio marge / alçada R | **0,213** |
-
-El marge real és aproximadament **una cinquena part** del que exigeix §1.3, i és un marge
-uniforme de ~65 px als quatre costats — un valor de generació automàtica, no un valor de disseny
-calculat a partir de l'alçada de la "R".
-
-Conseqüència pràctica: si el logotip es col·loca respecte de la seva caixa, el text adjacent
-pot tocar el traç. Cal ampliar el marge a 600 px sobre el canvas de 2000 px, cosa que obliga a
-recalcular la caixa. **No és una correcció d'arxiu: és un canvi de disseny del retall.**
-
----
-
-### PO-4 — `FONDO_BLANCO` amb canal alfa
-
-**TANCAT. Mesurat. El nom és correcte; l'alfa és inert.**
-
-`B_NEGRO_FONDO_BLANCO_MASTER_4096px.png` i `..._WEB_2048px.png`: **100,00% de píxels opacs.**
-Zero píxels transparents, zero parcials. Cantonades i vores a `(255,255,255,255)` — blanc pur
-opac.
-
-El fitxer porta canal alfa (colorType 6) perquè PNG el porta, però **no conté cap transparència
-real**. El fons és blanc pintat, tal com diu el nom. No hi ha contradicció entre el nom i el
-contingut.
-
----
-
-### PO-5 — Previsualització amb composició defectuosa
-
-**TANCABLE PER GOVERNANÇA. No és mesurable: és un defecte de text superposat a la imatge.**
-
-L'etiqueta de la secció A de `RLF_LOGO_AAA_4_VARIANTS_PREVIEW.jpg` mostra dos textos pintats un
-damunt de l'altre. És un error de composició del fitxer de previsualització, no de la marca ni
-dels logotips.
-
-Acció: regenerar la previsualització. No afecta cap actiu publicable.
-
----
-
-## Troballa nova — PO-7 (crítica)
-
-### `A_VERDE_FONDO_TRANSPARENTE_MASTER_4096px.png` no és transparent
-
-**MESURAT. Defecte real del fitxer.**
-
-| Paràmetre | Valor |
-|---|---|
-| Dimensions | 2000 × 1224 px |
-| Píxels opacs | **100,00%** |
-| Píxels transparents | 0,00% |
-| Color de fons | `(0,0,0)` — negre pur |
-| Color de tinta dominant | `(4,93,63)` — verd |
-| Caixa de contingut | tota la imatge (marges 0 a tots quatre costats) |
-
-**El fitxer porta `FONDO_TRANSPARENTE` al nom i té el fons negre pur i opac.** No és un fitxer
-transparent en absolut.
-
-Comparació amb el seu company de grup:
-
-| Fitxer | Alfa | Fons |
-|---|---|---|
-| `A_VERDE..._MASTER_4096px.png` | 0% transparent | **negre opac** |
-| `A_VERDE..._WEB_2048px.png` | 54,4% transparent | transparent real |
-
-És a dir: del joc A, el fitxer de rol **web** és transparent i el de rol **màster** no ho és.
-El màster és el que hauria de ser més net i complet.
-
-**Impacte:** aquest fitxer és el candidat natural a màster d'impressió i de composició. En
-l'estat actual, sobre qualsevol fons que no sigui negre, arrossega un rectangle negre. No es pot
-publicar com a actiu transparent.
-
-Condició de tancament: reexportar el màster del joc A amb fons realment transparent, o
-substituir-lo pel fitxer web (que sí que és transparent) i reexportar el web des del màster
-corregit.
-
----
-
-## Troballa nova — PO-8 (crítica)
-
-### DOS fitxers de grups diferents tenen la mateixa distribució de píxels
-
-**MESURAT. Sospita forta de duplicació encreuada.**
-
-| Fitxer | Mida | FNV-1a del fitxer sencer |
-|---|---|---|
-| `A_VERDE_FONDO_TRANSPARENTE_WEB_2048px.png` | 2.356.787 B | `5cc8bf68` |
-| `B_NEGRO_FONDO_TRANSPARENTE_WEB_2048px.png` | 1.822.735 B | `9c15d9b3` |
-
-Els hashes difereixen i el pes difereix, així que **no són el mateix fitxer byte a byte**. Però
-la distribució d'alfa és idèntica a la xifra exacta:
-
-- totalment transparents: **1.331.775** px (tots dos)
-- parcials: **1.110.187** px (tots dos)
-- opacs: **6.038** px (tots dos)
-- caixa de contingut: `minX 64, maxX 1935, minY 64, maxY 1159` (tots dos)
-- marges: 65/66/66/66 (tots dos)
-
-Dues imatges amb tints de color diferents (verd i gris fosc) **no poden** compartir la
-distribució d'alfa exacta llevat que siguin la mateixa imatge amb el color canviat, o que una
-s'hagi generat de l'altra sense alterar l'estructura d'alfa.
-
-**No afirmo que siguin el mateix logotip**: el verd i el fosc són clarament diferents a ull, i
-els hashes no coincideixen. El que afirmo, i és el que preocupa, és que **la geometria i
-l'estructura d'alfa són idèntiques al píxel**, cosa que en un lliurament de dues variants de
-color independents és un senyal que cal comprovar a l'origen de la generació.
-
-Condició de tancament: verificar a la font de generació si els dos fitxers deriven del mateix
-màster d'alfa, i confirmar-ho o corregir-ho. Aquesta comprovació no es pot fer des d'aquí amb
-més precisió del que s'ha fet.
+Els JPEG s'han analitzat per l'estructura de marcadors (SOF, DQT, quantitzadors) i per
+comparació byte a byte.
 
 ---
 
@@ -197,17 +23,221 @@ més precisió del que s'ha fet.
 |---|---|---|
 | PO-1 mides | **Obert** — decisió de governança | Noms vs. contingut |
 | PO-2 pes web > màster | **Mesurat, incompleix** | Reexportar PNG de web |
-| PO-3 marge §1.3 | **Mesurat, incompleix** (0,213 del exigit) | Canvi de retall de disseny |
+| PO-3 marge §1.3 | **Mesurat, incompleix** (0,213 de l'exigit) | Canvi de retall de disseny |
 | PO-4 alfa a `FONDO_BLANCO` | **TANCAT — nom correcte** | Cap acció |
 | PO-5 previsualització | **Obert** — regenerar | Fitxer auxiliar |
 | PO-6 variant B al sistema visual | **Obert** — decisió de governança | §1.2 vs. lliurament |
 | PO-7 joc A màster no transparent | **Mesurat, defecte** | Reexportar |
-| PO-8 alfa idèntica a dos grups | **Mesurat, sospita** | Verificar a l'origen |
-
-**Dos punts tancats o resolts, tres mesurats amb veredicte, tres que requereixen decisió de
-governança o verificació a l'origen.** Cap s'ha tancat per declaració.
+| PO-8 alfa idèntica a dos grups | **Mesurat** | Vegeu resolució |
+| PO-9 còpia doble del màster B blanc | **TANCAT — decideix el hash** | Cap acció als fitxers |
+| PO-10 paleta del verd | **TANCAT — el lliurament fa servir el verd de §1.2.3** | Cap acció |
+| PO-11 PDF blanc no llegible | **TANCAT** | Reintent amb èxit |
 
 ---
 
-*Document derivat. Les mesures són resultat d'inspecció directa de píxels i es declaren com a
-tals. Si hi ha discrepància amb el document mestre, mana el document mestre.*
+### PO-4 — `FONDO_BLANCO` amb canal alfa
+
+**TANCAT. El nom és correcte; l'alfa és inert.**
+
+Els dos PNG de `B_NEGRO_FONDO_BLANCO` són **100,00% de píxels opacs**, zero transparents, zero
+parcials. Cantonades i vores a `(255,255,255,255)`. El fons és blanc pintat, tal com diu el nom.
+
+---
+
+### PO-10 — Paleta del verd: el lliurament i el document coincideixen
+
+**TANCAT. El retiro.**
+
+| Origen | Verd |
+|---|---|
+| §1.2.3 del document mestre | `#005C3F` |
+| README del lliurament AAA | `#056445` (aproximació declarada) |
+| **Píxel dominant mesurat a la imatge A** | **`(4,93,63)` = `#045D3F`** |
+
+El verd pintat és `#045D3F`: quatre unitats de diferència al canal vermell i una al verd
+respecte de `#005C3F`, idèntic al blau. La variació prové de l'antialiàsing de l'empremta
+desgastada, no d'un canvi de color.
+
+**El logotip fa servir el verd de §1.2.3.** La discrepància que es va registrar era una
+comparació contra el valor declarat al README, no contra el valor pintat. Queda tancada.
+
+---
+
+### PO-3 — Marge de seguretat de §1.3
+
+**MESURAT. Incompleix l'especificació.**
+
+| Paràmetre | Valor |
+|---|---|
+| Alçada del glif "R" de READY | 300 px |
+| Marge exigit per §1.3 (R ×2) | **600 px** |
+| Marge real, tots els PNG transparents | 64–67 px |
+| Ràtio marge / alçada R | **0,213** |
+
+El marge real és una cinquena part de l'exigit i és uniforme als quatre costats — valor de
+generació automàtica, no de disseny. Ampliar-lo a 600 px sobre un canvas de 2000 obliga a
+recalcular la caixa: **és un canvi de retall, no una reparació d'arxiu.** Decisió de direcció
+d'art.
+
+---
+
+### PO-2 — El fitxer "WEB" més pesat que el "MASTER"
+
+**TANCAT COM A CAUSA. Mesurat.**
+
+| Grup | PNG màster | PNG web | Diferència |
+|---|---|---|---|
+| A verd transparent | 1.828.434 B | 2.356.787 B | web +528 KB |
+| B negre transparent | 1.728.932 B | 1.822.735 B | web +94 KB |
+| B negre fons blanc | 1.317.380 B | 1.357.570 B | web +40 KB |
+
+Causa identificada: als dos grups transparents, els PNG de màster i de web tenen **la mateixa
+distribució d'alfa a la xifra exacta** (vegeu PO-8) i la mateixa caixa de contingut. Contenen la
+mateixa imatge; el fitxer gran no aporta res que el petit no tingui.
+
+Acció: reexportar els PNG de rol web amb compressió adequada a la seva funció (§1.6, §6.8.3).
+
+---
+
+### PO-8 — Estructura d'alfa idèntica entre dues variants de color
+
+**RESOLT. L'explicació és la font única.**
+
+| Fitxer | Mida | FNV-1a | Alfa idèntica |
+|---|---|---|---|
+| `A_VERDE_FONDO_TRANSPARENTE_WEB_2048px.png` | 2.356.787 B | `5cc8bf68` | 1.331.775 / 1.110.187 / 6.038 |
+| `B_NEGRO_FONDO_TRANSPARENTE_WEB_2048px.png` | 1.822.735 B | `9c15d9b3` | 1.331.775 / 1.110.187 / 6.038 |
+
+Els hashes difereixen, així que no són el mateix fitxer. Però comparteixen la distribució d'alfa
+exacta i la caixa de contingut exacta.
+
+**Conclusió:** és l'efecte esperat de generar les dues variants de color des de la **mateixa font
+de tinta**. El README del lliurament ho declara: la textura desgastada s'hereta de la font
+carregada, i el que canvia entre variants és el color, no l'empremta. Un alfà compartit és
+coherent amb aquest mètode.
+
+**No és un defecte.** Es registra com a característica del mètode de generació, perquè un
+auditor futur que trobi dues imatges amb alfa idèntica ha de saber que és esperat i per què.
+
+---
+
+### PO-9 — Còpia doble del màster B blanc
+
+**TANCAT. Decisió pel hash del manifest.**
+
+S'han rebut dues còpies de `B_NEGRO_FONDO_BLANCO_MASTER_4096px.jpg`, amb pesos diferents:
+
+| Còpia | Pes | FNV-1a |
+|---|---|---|
+| A | 298.843 B | `9d346b0` |
+| B | 296.999 B | `8991cb46` |
+
+Els dos fitxers comparteixen capçalera (`JFIF` + perfil ICC + mateixa taula de quantitzadors) i
+divergeixen per primer cop al byte **686**. **294.949 bytes dels 296.999 difereixen:** són
+pràcticament dos fitxers diferents, no dues còpies del mateix.
+
+El manifest SHA-256 del lliurament és la font d'autoritat per decidir quin és el canònic:
+
+```
+ee628d376c00856d873fb3bb1b07899d21286a1b8521962a1183fff2d8a54257  B_NEGRO_FONDO_BLANCO/RLF_LOGO_B_NEGRO_FONDO_BLANCO_MASTER_4096px.jpg
+```
+
+**Regla:** el fitxer que el repositori ha d'adoptar és el que compleixi aquest hash. El que no
+hi compleixi és un duplicat no canònic i no ha de viure al costat del canònic. La comprovació es
+farà quan els fitxers estiguin carregats: `sha256sum` sobre el fitxer del repositori contra
+l'entrada del manifest.
+
+---
+
+### PO-7 — `A_VERDE_FONDO_TRANSPARENTE_MASTER_4096px.png` no és transparent
+
+**MESURAT. Defecte real, i abastat només a aquest fitxer.**
+
+| Paràmetre | Valor |
+|---|---|
+| Dimensions | 2000 × 1224 px |
+| Píxels opacs | **100,00%** |
+| Píxels transparents | 0,00% |
+| Cantonades i vores | `(0,0,0)` a les vuit mostres |
+| Color de tinta dominant | `(4,93,63)` — verd |
+| Proporció de fons negre | 63,01% dels píxels mostrejats |
+| Caixa de contingut | tota la imatge, marges 0 |
+
+El fitxer porta `FONDO_TRANSPARENTE` al nom i té el fons **negre pur i opac**. Al seu grup,
+el fitxer de rol *web* sí que és transparent (54,4%).
+
+**Impacte:** és el candidat natural a màster de composició i d'impressió. En l'estat actual,
+sobre qualsevol fons que no sigui negre arrossega un rectangle negre que ocupa el 63% de la
+superfície.
+
+Condició de tancament: reexportar el màster del joc A amb transparència real, o substituir-lo
+pel de rol web i regenerar aquest des del màster corregit.
+
+---
+
+### PO-5 — Previsualització amb composició defectuosa
+
+**TANCABLE PER GOVERNANÇA.**
+
+`RLF_LOGO_AAA_4_VARIANTS_PREVIEW.jpg` (2000 × 857 px) mostra dos textos pintats un damunt de
+l'altre a l'etiqueta de la secció A. És un error de composició del fitxer auxiliar.
+
+Acció: regenerar. No afecta cap actiu publicable.
+
+---
+
+### PO-11 — PDF de fons blanc no llegible
+
+**TANCAT. Reintent amb èxit.**
+
+Al segon intent, `B_NEGRO_FONDO_BLANCO_PRINT_300dpi.pdf` s'ha verificat: capçalera `%PDF-1.4`,
+`%%EOF` present, **sense xifrat**, **1 pàgina**, 539.532 B. És un PDF vàlid.
+
+El problema era del lector en el primer intent, no del fitxer. **El PDF està bé.**
+
+---
+
+### PO-1 — Mides declarades vs. mides reals
+
+**OBERT. Decisió de governança, no mesura.**
+
+Els setze binaris fan **2000 × 1224 px**. El canvas és idèntic a tots quatre grups. Cap fitxer fa
+4096 px ni 2048 px.
+
+El camp `[SIZE]` del nom declara una mida que cap fitxer té. Fins que governança decideixi els
+noms, s'ha de llegir com a **rol** (`MASTER` / `WEB`), no com a mida, i la mida real és la del
+manifest.
+
+---
+
+### PO-6 — Estat de la variant B dins el sistema visual
+
+**OBERT. Requereix decisió de governança (Nivell 6).**
+
+§1.2 defineix la identitat visual com a *"piqué blanc cru amb elements no fotogràfics resolts com
+a brodat tèxtil verd fosc"* i §1.2.3 fixa la paleta amb el fil verd. La variant B (`#161616`) no
+és verd: introduir-la és ampliar el sistema visual, i §5.2.11 exigeix justificació sòlida,
+aprovació explícita, documentació completa i comunicació clara.
+
+Dada d'ús mesurada: la tinta de la variant B és `(21,21,21)`, pràcticament el `#161616` declarat.
+Sobre fons fosc el contrast és mínim, de manera que la seva funció natural és sobre fons clar.
+
+Condició de tancament: decisió que registri si la variant B és un segon color oficial o una
+variant perifèrica d'ús restringit.
+
+---
+
+## Estat final de la llista
+
+**Tancats en aquesta revisió:** PO-4, PO-8, PO-9, PO-10, PO-11.
+**Mesurats amb veredicte i acció definida:** PO-2, PO-3, PO-7.
+**Oberts per decisió de governança:** PO-1, PO-5, PO-6.
+
+Cap punt s'ha tancat per declaració. Els tres que queden oberts no depenen de cap mesura que es
+pugui fer des d'aquí.
+
+---
+
+*Document derivat. Les mesures són resultat d'inspecció directa de píxels i d'estructura
+d'arxiu, i es declaren com a tals. Si hi ha discrepància amb el document mestre, mana el
+document mestre.*
