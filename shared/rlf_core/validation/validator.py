@@ -31,6 +31,8 @@ logger = get_logger(__name__)
 
 
 class FieldRule:
+    """Una regla de validacio aplicada a un camp d'un registre."""
+
     def __init__(
         self,
         field: str,
@@ -39,6 +41,20 @@ class FieldRule:
         allow_not_applicable: bool = False,
         justification: Optional[str] = None,
     ) -> None:
+        """Inicialitza una regla de validacio.
+
+        Args:
+            field: Nom del camp sobre el qual s'aplica.
+            rule: Tipus de regla, un dels sis permesos.
+            value: Parametre de la regla, com el tipus, el rang, el conjunt o
+                la longitud admesa.
+            allow_not_applicable: Si NOT_APPLICABLE es admissible en aques camp.
+            justification: Justificacio persistent que exigeix R17 quan el camp
+                es declara NOT_APPLICABLE.
+
+        Raises:
+            ValueError: Si el tipus de regla no es cap dels coneguts.
+        """
         known = {RULE_REQUIRED, RULE_TYPE, RULE_RANGE, RULE_ENUM, RULE_PATTERN, RULE_LENGTH}
         if rule not in known:
             raise ValueError(f"Tipus de regla desconegut: {rule!r}")
@@ -50,6 +66,14 @@ class FieldRule:
 
 
 def validate_required(value: Any) -> Optional[str]:
+    """Comprova que un camp obligatori no es buit, segons R17.
+
+    Args:
+        value: Valor del camp.
+
+    Returns:
+        None si el valor es valid, o el motiu del rebuig.
+    """
     if value is None:
         return "camp absent"
     if isinstance(value, str) and value.strip().upper() in BLANK_MARKERS:
@@ -58,6 +82,15 @@ def validate_required(value: Any) -> Optional[str]:
 
 
 def validate_type(value: Any, expected: Any) -> Optional[str]:
+    """Comprova el tipus d'un valor.
+
+    Args:
+        value: Valor del camp.
+        expected: Tipus esperat.
+
+    Returns:
+        None si el tipus es correcte, o el motiu del rebuig.
+    """
     if value is None:
         return None
     if not isinstance(value, expected):
@@ -66,6 +99,15 @@ def validate_type(value: Any, expected: Any) -> Optional[str]:
 
 
 def validate_range(value: Any, limits: Sequence[float]) -> Optional[str]:
+    """Comprova que un valor numeric es dins d'un interval.
+
+    Args:
+        value: Valor del camp.
+        limits: Parell de minim i maxim.
+
+    Returns:
+        None si el valor es dins l'interval, o el motiu del rebuig.
+    """
     if value is None:
         return None
     if not isinstance(value, (int, float)) or isinstance(value, bool):
@@ -79,6 +121,15 @@ def validate_range(value: Any, limits: Sequence[float]) -> Optional[str]:
 
 
 def validate_enum(value: Any, allowed: Iterable[Any]) -> Optional[str]:
+    """Comprova que un valor pertany a un conjunt permes.
+
+    Args:
+        value: Valor del camp.
+        allowed: Valors admesos.
+
+    Returns:
+        None si el valor es admissible, o el motiu del rebuig.
+    """
     if value is None:
         return None
     if value not in set(allowed):
@@ -87,6 +138,15 @@ def validate_enum(value: Any, allowed: Iterable[Any]) -> Optional[str]:
 
 
 def validate_length(value: Any, limits: Sequence[int]) -> Optional[str]:
+    """Comprova la longitud d'una cadena o d'una col·leccio.
+
+    Args:
+        value: Valor del camp.
+        limits: Parell de minim i maxim.
+
+    Returns:
+        None si la longitud es dins l'interval, o el motiu del rebuig.
+    """
     if value is None:
         return None
     if not hasattr(value, "__len__"):
@@ -100,6 +160,15 @@ def validate_length(value: Any, limits: Sequence[int]) -> Optional[str]:
 
 
 def _apply_rule(rule: FieldRule, value: Any) -> Optional[str]:
+    """Aplica una regla concreta a un valor.
+
+    Args:
+        rule: Regla a aplicar.
+        value: Valor del camp.
+
+    Returns:
+        None si el valor passa la regla, o el motiu del rebuig.
+    """
     if rule.rule == RULE_REQUIRED:
         return validate_required(value)
     if rule.rule == RULE_TYPE:
@@ -117,6 +186,17 @@ def validate_record(
     record: dict[str, Any],
     rules: Sequence[FieldRule],
 ) -> dict[str, Any]:
+    """Valida un registre contra un conjunt de regles.
+
+    Args:
+        record: Registre a validar.
+        rules: Regles a aplicar sobre els camps del registre.
+
+    Returns:
+        Un resultat canonic SUCCESS amb els camps validats, o HOLD si algun
+        camp no passa. REJECT si el registre no es un diccionari. FAILURE si
+        apareix una excepcio inesperada.
+    """
     try:
         if not isinstance(record, dict):
             return make_reject("El registre no es un diccionari")
@@ -173,6 +253,20 @@ def find_contradictions(
     key_field: str = "field",
     value_field: str = "value",
 ) -> dict[str, Any]:
+    """Detecta contradiccions entre afirmacions sobre el mateix camp.
+
+    Una contradiccio es REJECT i no HOLD, perque dues fonts que es neguen ja
+    son informacio i no ignorancia, segons la regla tercera de S4.1.4.
+
+    Args:
+        claims: Afirmacions amb camp i valor.
+        key_field: Nom del camp que identifica la materia.
+        value_field: Nom del camp que porta el valor declarat.
+
+    Returns:
+        Un resultat canonic SUCCESS amb les contradiccions trobades i un
+        indicador de si n'hi ha. REJECT si el format no es l'esperat.
+    """
     if not isinstance(claims, Sequence):
         return make_reject("Les afirmacions han de ser una sequencia")
 
@@ -199,6 +293,15 @@ def find_contradictions(
 
 
 def validate_module_output(result: Any) -> dict[str, Any]:
+    """Comprova que la sortida d'un modul compleix SPEC-CODE-001 (S6.1.6).
+
+    Args:
+        result: Valor retornat per un modul.
+
+    Returns:
+        Un resultat canonic SUCCESS si la forma es correcta, o REJECT si no ho
+        es o si porta dada amb un estat que no sigui SUCCESS.
+    """
     if not is_canonical(result):
         return make_reject(
             "La sortida no compleix el contracte de retorn de SPEC-CODE-001",
@@ -219,6 +322,17 @@ def coverage_report(
     totals: dict[str, int],
     targets: Optional[dict[str, float]] = None,
 ) -> dict[str, Any]:
+    """Calcula la cobertura de proves contra els objectius de S6.1.11.
+
+    Args:
+        covered: Elements coberts per categoria.
+        totals: Elements totals per categoria.
+        targets: Objectius per categoria. Per defecte, els de S6.1.11.
+
+    Returns:
+        Un resultat canonic SUCCESS amb la cobertura i la llista de mancances.
+        HOLD si alguna categoria no te elements totals.
+    """
     threshold = dict(targets or DEFAULT_COVERAGE_TARGETS)
 
     for category, total in totals.items():
@@ -252,6 +366,16 @@ def coverage_report(
 
 
 def assert_spec_code_compliant(module_name: str, checks: dict[str, bool]) -> dict[str, Any]:
+    """Comprova els requisits de SPEC-CODE-001 d'un modul (S6.1).
+
+    Args:
+        module_name: Nom del modul.
+        checks: Resultats de les comprovacions individuals.
+
+    Returns:
+        Un resultat canonic SUCCESS si totes passen, o REJECT amb la llista de
+        comprovacions fallides.
+    """
     failed = [name for name, passed in checks.items() if not passed]
     if failed:
         return make_reject(
