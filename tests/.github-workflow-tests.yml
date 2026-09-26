@@ -1,25 +1,8 @@
-name: RLF test suite
+REMOGUT.
 
-on:
-  push:
-  pull_request:
+Aquest fitxer era una copia temporal del flux de treball de proves, amb un nom
+enganyos. El flux de treball viu a `.github/workflows/` i les rutes
+`tests/run.sh`, `Makefile` i `.githooks/pre-commit` cobreixen l'execucio de
+proves sense dependre de GitHub Actions.
 
-jobs:
-  tests:
-    name: Proves del sistema
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Configurar Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Executar totes les suites
-        run: python3 tests/run_all.py
-
-      - name: Comprovar sintaxi de tots els moduls
-        run: python3 -m compileall -q shared projects governance tests
+Es pot esborrar del repositori sense cap efecte.
