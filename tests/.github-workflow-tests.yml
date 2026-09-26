@@ -1,8 +1,19 @@
-REMOGUT.
+RETIRAT PER NOM ENGANYOS.
 
-Aquest fitxer era una copia temporal del flux de treball de proves, amb un nom
-enganyos. El flux de treball viu a `.github/workflows/` i les rutes
-`tests/run.sh`, `Makefile` i `.githooks/pre-commit` cobreixen l'execucio de
-proves sense dependre de GitHub Actions.
+Aquest fitxer era una copia temporal del flux de treball de proves. El nom
+començava amb un punt i duia el sufix d'una cosa que no era, la qual cosa
+induia a confusio sobre la seva funcio.
 
-Es pot esborrar del repositori sense cap efecte.
+El flux de treball de GitHub Actions no es pot escriure des d'aquesta connexio
+perque al token li falta l'ambit que autoritza crear fitxers a
+`.github/workflows/`. Si es vol, es pot crear manualment des de la web de GitHub
+amb el contingut que hi ha a la documentacio del repositori.
+
+L'execucio de proves esta coberta, sense necessitat de GitHub Actions, per:
+
+  - tests/run_all.py    Executor propi, sense dependencies externes
+  - tests/run.sh        Comprovacio de sintaxi i execucio de les suites
+  - Makefile            Objectiu `make verify`
+  - .githooks/pre-commit  Verificacio automatica abans de cada commit
+
+Aquest fitxer es pot esborrar del repositori sense cap efecte.
